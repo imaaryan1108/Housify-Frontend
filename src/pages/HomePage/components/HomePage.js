@@ -69,38 +69,31 @@ function HomePage() {
       <Grid
         className={classes.container}
         container
-        direction='row'
-        justifyContent='space-between'
-        alignItems='center'>
-        <Grid item xs={6} direction='column' justifyContent='space-Between'>
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item xs={6} direction="column" justifyContent="space-Between">
           <p className={classes.mainHeader}>
             EASY TO FIND YOUR NEXT <br />{' '}
             <span className={classes.innerHeader}>PERFECT PLACE</span>
           </p>
 
           <p className={classes.descriptionText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-            bibendum sodales nisi, sed consequat nulla. Pellentesque sodales at
-            lectus et tristique. Suspendisse vitae vulputate odio. Quisque
-            iaculis quam sapien, non vehicula mauris convallis ut.
+            Your one stop for the complete housing solution! <br /> We do our
+            best to make sure we have it all and make it easy for you to do the
+            same. We're constantly improving our inventory so that you Your
+            one-stop for the complete housing solution and all your housing
+            related needs.
           </p>
 
-          <NavbarButton
-            borderRadius={20}
-            width={180}
-            height={60}
-            fontSize={18}
-            paddingLeftAndRight={50}
-            text={homePageConst.LEARN_MORE}
-            onClick={handleLearnMore}
-          />
           <div className={classes.searchContainer}>
             <Search />
           </div>
         </Grid>
         <Grid item xs={6}>
           <div className={classes.headerImageContainer}>
-            <img className={classes.headerImg} src={headerImg} alt='' />
+            <img className={classes.headerImg} src={headerImg} alt="" />
           </div>
         </Grid>
       </Grid>

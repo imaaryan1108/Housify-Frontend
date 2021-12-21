@@ -9,5 +9,5 @@ export const setSearchQuery = (value, dispatch) =>
 export const setSelectedLocation = (payload, dispatch) =>
   dispatch({ type: generalType.SET_SELECTED_LOCAION, payload });
 
-export const setSelectedMaxPrice = (payload, dispatch) =>
-  dispatch({ type: generalType.SET_MAX_PRICE, payload });
+export const setSelectedType = (payload, dispatch) =>
+  dispatch({ type: generalType.SET_SELECTED_TYPE, payload });

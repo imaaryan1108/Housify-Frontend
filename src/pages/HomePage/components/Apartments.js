@@ -1,15 +1,34 @@
-import { Grid, makeStyles } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
-import BlueButton from "../../../common/components/StyledButtons/BlueButton";
-import { apartmentsConst } from "../../../utils/constants";
-import ApartmentCard from "./ApartmentCard";
-import hearts from "../../../assets/Icon ionic-md-heart-half.svg";
-import home from "../../../assets/Icon awesome-home.svg";
-import hands from "../../../assets/Icon awesome-hands-helping.svg";
+import { Grid, makeStyles } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import BlueButton from '../../../common/components/StyledButtons/BlueButton';
+import { apartmentsConst } from '../../../utils/constants';
+import ApartmentCard from './ApartmentCard';
+import hearts from '../../../assets/Icon ionic-md-heart-half.svg';
+import home from '../../../assets/Icon awesome-home.svg';
+import hands from '../../../assets/Icon awesome-hands-helping.svg';
+import { withoutAuthInstance } from '../../../utils/axios/axios';
 
 function Apartments() {
   const themeState = useSelector((state) => state.navbar);
+
+  const [houses, setHouses] = useState([]);
+
+  useEffect(() => {
+    let url = '/houses';
+
+    console.log(url);
+
+    withoutAuthInstance
+      .get(url)
+      .then((response) => {
+        setHouses(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const useStyles = makeStyles((theme) => ({
     container: {
@@ -19,14 +38,14 @@ function Apartments() {
       padding: `${theme.typography.pxToRem(44)} ${theme.typography.pxToRem(
         44
       )}`,
-      overflow: "hidden",
+      overflow: 'hidden',
     },
     mainHeader: {
       color: themeState.isDark
         ? theme.palette.dark.text
         : theme.palette.light.text,
       fontSize: theme.typography.pxToRem(60),
-      fontWeight: "bold",
+      fontWeight: 'bold',
       marginTop: `${theme.typography.pxToRem(200)}`,
     },
     innerHeader: {
@@ -40,16 +59,19 @@ function Apartments() {
       color: themeState.isDark
         ? theme.palette.dark.text
         : theme.palette.light.text,
-      opacity: "0.6",
-      fontStyle: "italic",
+      opacity: '0.6',
+      fontStyle: 'italic',
     },
     apartmentsGrid: {
       paddingTop: `${theme.typography.pxToRem(80)}`,
+      paddingBottom: '2%',
+      marginLeft: '10%',
+      marginRight: '10%',
     },
     imgs: {
       backgroundColor: `${theme.palette.primaryBlue}`,
       borderRadius: `${theme.typography.pxToRem(200)}`,
-      transform: "scale(0.8)",
+      transform: 'scale(0.8)',
       padding: `${theme.typography.pxToRem(10)}`,
       width: `${theme.typography.pxToRem(244)}`,
       height: `${theme.typography.pxToRem(244)}`,
@@ -58,16 +80,16 @@ function Apartments() {
       color: themeState.isDark
         ? theme.palette.dark.text
         : theme.palette.light.text,
-      fontSize: theme.typography.pxToRem(28),
-      textAlign: "center",
-      marginLeft: theme.typography.pxToRem(-180),
+      fontSize: theme.typography.pxToRem(34),
+      textAlign: 'center',
+      marginLeft: theme.typography.pxToRem(-120),
     },
     serviceHeader: {
       color: themeState.isDark
         ? theme.palette.dark.text
         : theme.palette.light.text,
       fontSize: theme.typography.pxToRem(60),
-      fontWeight: "bold",
+      fontWeight: 'bold',
       marginTop: `${theme.typography.pxToRem(100)}`,
     },
   }));
@@ -95,40 +117,25 @@ function Apartments() {
         <Grid
           item
           container
+          spacing={4}
           alignItems="center"
           direction="row"
-          justifyContent="center"
+          justify="center"
           className={classes.apartmentsGrid}
         >
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
-
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
-        </Grid>
-        <Grid
-          item
-          container
-          alignItems="center"
-          direction="row"
-          justifyContent="center"
-          className={classes.apartmentsGrid}
-        >
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
-
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
-          <Grid item xs={10} lg={3}>
-            <ApartmentCard />
-          </Grid>
+          {houses &&
+            houses.slice(0, 8).map((house) => {
+              return (
+                <Grid item xs={12} md={4} spacing={2}>
+                  <ApartmentCard
+                    price={house.house_properties.housePrice}
+                    locality={house.house_location.locality}
+                    city={house.house_location.city}
+                    image={house.house_properties.houseImage}
+                  />
+                </Grid>
+              );
+            })}
         </Grid>
 
         {/* */}
@@ -139,17 +146,7 @@ function Apartments() {
           direction="row"
           justifyContent="center"
           className={classes.apartmentsGrid}
-        >
-          <Grid item xs={3} justifyContent="center">
-            <BlueButton
-              text={apartmentsConst.VIEW_MORE}
-              width={260}
-              height={88}
-              borderRadius={24}
-              fontSize={22}
-            />
-          </Grid>
-        </Grid>
+        ></Grid>
 
         <Grid
           item
@@ -172,14 +169,27 @@ function Apartments() {
           justifyContent="center"
           className={classes.apartmentsGrid}
         >
-          <Grid item xs={3} justifyContent="center">
+          <Grid item xs={1} md={3} justifyContent="center">
             <img src={home} alt="" className={classes.imgs} />
+
+            <p className={classes.serviceText}>
+              Buy your dream <br />
+              <span className={classes.innerHeader}>home</span>
+            </p>
           </Grid>
-          <Grid item xs={3} justifyContent="center">
+          <Grid item xs={1} md={3} justifyContent="center">
             <img src={hearts} alt="" className={classes.imgs} />
+            <p className={classes.serviceText}>
+              Rent the home you <br />
+              <span className={classes.innerHeader}>love</span>
+            </p>
           </Grid>
-          <Grid item xs={3} justifyContent="center">
+          <Grid item xs={1} md={3} justifyContent="center">
             <img src={hands} alt="" className={classes.imgs} />
+            <p className={classes.serviceText}>
+              Be partner with <br />
+              <span className={classes.innerHeader}>Housify</span>
+            </p>
           </Grid>
         </Grid>
 
@@ -190,24 +200,9 @@ function Apartments() {
           direction="row"
           justifyContent="center"
         >
-          <Grid item xs={3} justifyContent="center">
-            <p className={classes.serviceText}>
-              Buy your dream <br />
-              <span className={classes.innerHeader}>home</span>
-            </p>
-          </Grid>
-          <Grid item xs={3} justifyContent="center">
-            <p className={classes.serviceText}>
-              Rent the home you <br />
-              <span className={classes.innerHeader}>love</span>
-            </p>
-          </Grid>
-          <Grid item xs={3} justifyContent="center">
-            <p className={classes.serviceText}>
-              Be partner with <br />
-              <span className={classes.innerHeader}>Homefinder</span>
-            </p>
-          </Grid>
+          <Grid item xs={4} justifyContent="center"></Grid>
+          <Grid item xs={4} justifyContent="center"></Grid>
+          <Grid item xs={4} justifyContent="center"></Grid>
         </Grid>
       </Grid>
     </div>

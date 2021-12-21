@@ -8,6 +8,7 @@ const initState = {
   bearerToken: '',
   isEmailVerified: false,
   userId: '',
+  bookmarksChanged: false,
 };
 
 const userReducer = (state = initState, action) => {
@@ -21,6 +22,7 @@ const userReducer = (state = initState, action) => {
         pictureUrl: action.payload.pictureUrl,
         isEmailVerified: action.payload.isEmailVerified,
         userId: action.payload.userId,
+        bookmarksChanged: action.payload.bookmarkChanged,
       };
     }
     case authType.SET_BEARER_TOKEN: {

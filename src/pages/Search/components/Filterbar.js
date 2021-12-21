@@ -4,9 +4,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { Icon } from '@material-ui/core';
 import Filters from './Filters';
+import { useSelector } from 'react-redux';
 
 function Filterbar() {
   const [filterState, setFilterState] = useState(false);
+  const generalState = useSelector((state) => state.general);
 
   const handleFilterButtonClick = () => {
     console.log('filter button clicked');
@@ -52,16 +54,22 @@ function Filterbar() {
       marginTop: `${theme.typography.pxToRem(-95)}`,
       transition: '1s ease-out',
     },
+    placeholder: {
+      margin: `${theme.typography.pxToRem(10)} ${theme.typography.pxToRem(20)}`,
+      fontWeight: 'bold',
+    },
   }));
   const classes = useStyles();
 
   return (
     <div className={classes.container}>
       <div className={classes.filterContainer}>
-        <Icon className={classes.icons}>
-          <SearchIcon />
-        </Icon>
-        <div className={classes.searchBar}></div>
+        <div className={classes.searchBar}>
+          <div className={classes.placeholder}>
+            {' '}
+            {generalState.selectedLocation}
+          </div>
+        </div>
         <Icon className={classes.icons} onClick={handleFilterButtonClick}>
           <FilterListIcon />
         </Icon>

@@ -1,6 +1,6 @@
 export const NavbarConst = Object.freeze({
   HOME: 'HOME',
-  BOOKMARK: 'BOOKMARK',
+  BOOKMARK: 'BOOKMARKS',
   CONTACT: 'CONTACT',
   SIGN_IN: 'SIGN IN',
   SIGN_OUT: 'SIGN OUT',
@@ -15,8 +15,9 @@ export const searchConst = Object.freeze({
   LOCATION: 'LOCATION',
   MAX_PRICE: 'MAX PRICE',
   TYPE: 'TYPE',
-  LOCATION_PLACEHOLDER: 'NEW YORK',
+  LOCATION_PLACEHOLDER: 'DELHI',
   PRICE_PLACEHOLDER: '₹50,00,000',
+  TYPE_PLACEHOLDER: 'BUY',
 });
 
 export const homePageConst = Object.freeze({

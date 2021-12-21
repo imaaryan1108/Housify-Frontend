@@ -3,11 +3,12 @@ import { CardMedia } from '@material-ui/core';
 import { Icon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import villa from '../../../assets/villa.jfif';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { withoutAuthInstance } from '../../../utils/axios/axios';
+import { setUserLogin } from '../../../actions/userActions';
 
 function SearchCard({
   name,
@@ -19,12 +20,16 @@ function SearchCard({
   buildUpArea,
   bedroomNumber,
   image,
+  id,
 }) {
+  const dispatch = useDispatch();
   const themeState = useSelector((state) => state.navbar);
   const userState = useSelector((state) => state.user);
   const generalState = useSelector((state) => state.general);
 
   const [clicked, setClicked] = useState(false);
+  const [emi, setEmi] = useState();
+  const [avgPrice, setAvgPrice] = useState();
 
   const useStyles = makeStyles((theme) => ({
     card: {
@@ -68,7 +73,7 @@ function SearchCard({
     bottomRowContainer: {
       display: 'flex',
       justifyContent: 'space-between',
-      width: '30%',
+      width: '40%',
     },
     headerTitle: {
       fontSize: theme.typography.pxToRem(30),
@@ -144,6 +149,30 @@ function SearchCard({
   const classes = useStyles();
 
   useEffect(() => {
+    let url = '';
+
+    if (id) {
+      url = `/bookmarks/${id}`;
+      console.log(url);
+
+      withoutAuthInstance
+        .get(url)
+        .then((response) => {
+          response.data[0].bookmarks.forEach((el) => {
+            if (el.image === image) {
+              setClicked(true);
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    setEmi(Math.floor(Math.random() * (50000 - 15000) + 15000));
+    setAvgPrice(Math.floor(Math.random() * (10 - 1) + 1));
     // fetch data
     let url = '';
 
@@ -152,6 +181,7 @@ function SearchCard({
     } else {
       url = `/house/rent/${generalState.selectedLocation}`;
     }
+
     withoutAuthInstance
       .get(url)
       .then((response) => {
@@ -172,6 +202,10 @@ function SearchCard({
   }, []);
 
   const handleBookmarkClick = () => {
+    if (userState.isLoggedIn === false) {
+      window.alert('Please signin to add bookmarks');
+      return;
+    }
     setClicked(!clicked);
     let url = '';
     const bookmark = {
@@ -204,6 +238,7 @@ function SearchCard({
       console.log(clicked);
       console.log('delete');
       url = '/delete';
+
       withoutAuthInstance
         .post(url, bookmark)
         .then((response) => {
@@ -224,18 +259,17 @@ function SearchCard({
           <Typography>
             <div className={classes.columnContainer}>
               <div className={classes.rowContainers}>
-                <div className={classes.headerTitle}>{price}</div>{' '}
+                <div className={classes.headerTitle}>{price}</div>
                 <div className={classes.headerSubTitle}>
-                  EMI starts at 14.38K
-                </div>{' '}
+                  {`EMI starts at Rs ${emi}`}
+                </div>
                 <Icon className={classes.icon}>
-                  {' '}
-                  <FavoriteIcon onClick={handleBookmarkClick} />{' '}
+                  <FavoriteIcon onClick={handleBookmarkClick} />
                 </Icon>
               </div>
               <div className={classes.rowContainers}>
                 <div>
-                  <div className={classes.info}>{bedroomNumber} BHK </div>{' '}
+                  <div className={classes.info}>{bedroomNumber} BHK </div>
                   <div className={classes.address}>
                     {city} , {state}
                   </div>
@@ -243,18 +277,20 @@ function SearchCard({
               </div>
               <div className={classes.tableContainer}>
                 <span>
-                  <span className={classes.tableFirst}>Build Up Area</span>{' '}
-                  <br />{' '}
+                  <span className={classes.tableFirst}>Build Up Area</span>
+                  <br />
                   <span className={classes.tableSecond}>{buildUpArea}</span>
                 </span>
                 <div className={classes.verticalLine}></div>
                 <span>
-                  <span className={classes.tableFirst}>Avg. Price</span> <br />{' '}
-                  <span className={classes.tableSecond}>Rs 2.07 k /sq.ft</span>
+                  <span className={classes.tableFirst}>Avg. Price</span> <br />
+                  <span
+                    className={classes.tableSecond}
+                  >{`Rs ${avgPrice} k /sq.ft`}</span>
                 </span>
                 <div className={classes.verticalLine}></div>
                 <span>
-                  <span className={classes.tableFirst}>Locality</span> <br />{' '}
+                  <span className={classes.tableFirst}>Locality</span> <br />
                   <span className={classes.tableSecond}>{locality}</span>
                 </span>
               </div>

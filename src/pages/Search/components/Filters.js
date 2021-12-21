@@ -13,6 +13,7 @@ import {
   setSearchQuery,
   setSelectedLocation,
   setSelectedMaxPrice,
+  setSelectedType,
 } from '../../../actions/generalActions';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -31,14 +32,6 @@ function Filters() {
 
   const generalState = useSelector((state) => state.general);
   const dispatch = useDispatch();
-
-  const handleChange = (event, newValue) => {
-    if (newValue !== null) setActiveTab(newValue, dispatch);
-  };
-
-  const handleSearchQuery = (e) => {
-    setSearchQuery(e.target.value, dispatch);
-  };
 
   const handleLocationDropdown = (e) => {
     if (locationAnchor !== null) {
@@ -66,8 +59,13 @@ function Filters() {
     }
   };
 
-  const handlePriceSelect = (e) => {
-    setSelectedMaxPrice(e.target.innerText, dispatch);
+  const handleTypeSelect = (e) => {
+    if (e.target.innerText === 'Buy') {
+      setActiveTab(0, dispatch);
+    } else {
+      setActiveTab(1, dispatch);
+    }
+    setSelectedType(e.target.innerText, dispatch);
     setPriceAnchor(null);
     setPricePopoverIsOpen(false);
   };
@@ -184,41 +182,11 @@ function Filters() {
         />
         <div className={classes.filter}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <h3> {searchConst.MAX_PRICE} </h3>
-            <p className={classes.placeholder}>
-              {generalState.selectedMaxPrice === ''
-                ? searchConst.PRICE_PLACEHOLDER
-                : generalState.selectedMaxPrice}
-            </p>
-          </div>
-          {pricePopoverIsOpen ? (
-            <IconButton
-              className={classes.buttons}
-              onClick={handlePriceDropdown}
-            >
-              <ArrowDownIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              className={classes.buttons}
-              onClick={handlePriceDropdown}
-            >
-              <ArrowUpIcon />
-            </IconButton>
-          )}
-        </div>
-        <Divider
-          className={classes.divider}
-          component="ol"
-          orientation="vertical"
-        />
-        <div className={classes.filter}>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h3> {searchConst.TYPE} </h3>
             <p className={classes.placeholder}>
-              {generalState.selectedMaxPrice === ''
-                ? searchConst.PRICE_PLACEHOLDER
-                : generalState.selectedMaxPrice}
+              {generalState.selectedType === ''
+                ? searchConst.TYPE
+                : generalState.selectedType}
             </p>
           </div>
           {pricePopoverIsOpen ? (
@@ -285,7 +253,7 @@ function Filters() {
       >
         <div className={classes.popover}>
           <div className={classes.popoverHeader}>
-            <h3>Price</h3>
+            <h3>Type</h3>
             <IconButton
               size="small"
               onClick={handlePriceDropdown}
@@ -294,10 +262,8 @@ function Filters() {
               <CloseIcon size="small" />
             </IconButton>
           </div>
-          <MenuItem onClick={handlePriceSelect}>Less Than 10L</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Between 10L & 50L</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Between 50L & 1Cr</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Above 1Cr</MenuItem>
+          <MenuItem onClick={handleTypeSelect}>Buy</MenuItem>
+          <MenuItem onClick={handleTypeSelect}>Rent</MenuItem>
         </div>
       </Popover>
     </div>

@@ -3,8 +3,8 @@ import { generalType } from '../utils/actionTypes';
 const initState = {
   activeTab: 0,
   searchQuery: '',
-  selectedLocation: '',
-  selectedMaxPrice: '',
+  selectedLocation: 'Delhi',
+  selectedType: '',
 };
 
 const generalReducer = (state = initState, action) => {
@@ -21,8 +21,8 @@ const generalReducer = (state = initState, action) => {
     case generalType.SET_SELECTED_LOCAION: {
       return { ...state, selectedLocation: action.payload };
     }
-    case generalType.SET_MAX_PRICE: {
-      return { ...state, selectedMaxPrice: action.payload };
+    case generalType.SET_SELECTED_TYPE: {
+      return { ...state, selectedType: action.payload };
     }
     default:
       return state;

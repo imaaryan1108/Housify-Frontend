@@ -2,7 +2,15 @@
 import { useEffect, useState } from 'react';
 import { NavbarConst } from '../../../utils/constants';
 import { Link } from 'react-router-dom';
-import { Avatar, makeStyles, Switch } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Button,
+  makeStyles,
+  Modal,
+  Switch,
+  Typography,
+} from '@material-ui/core';
 import { toggleTheme } from '../../../actions/navbarActions';
 import { useDispatch, useSelector } from 'react-redux';
 import NavbarButton from '../StyledButtons/NavbarButton';
@@ -10,12 +18,31 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { setBearerToken, setUserLogin } from '../../../actions/userActions';
 import { useHistory } from 'react-router';
 import { withoutAuthInstance } from '../../../utils/axios/axios';
+import Form from './Form';
 
 function Navbar() {
   const dispatch = useDispatch();
   const navbarState = useSelector((state) => state.navbar);
   const history = useHistory();
   const userState = useSelector((state) => state.user);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    height: '90%',
+    bgcolor: '#161414',
+    border: '4px solid #2064eb',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '25px',
+  };
 
   const { loginWithRedirect, logout, user, getAccessTokenSilently } =
     useAuth0();
@@ -80,6 +107,9 @@ function Navbar() {
       minWidth: theme.typography.pxToVw(110),
       maxWidth: theme.typography.pxToVw(110),
     },
+    modal: {
+      border: `1px ${theme.palette.primaryBlue}`,
+    },
   }));
 
   const classes = useStyles();
@@ -90,33 +120,36 @@ function Navbar() {
   // Handling User Login
 
   useEffect(() => {
-    if (user) {
-      let url = '/uniqueId';
+    async function effect() {
+      if (user) {
+        let url = '/uniqueId';
 
-      const token = {
-        user_id: user.sub,
-      };
-      const data = {
-        isLoggedIn: true,
-        userName: user?.name,
-        userEmail: user?.email,
-        pictureUrl: user?.picture,
-        isEmailVerified: user?.email_verified,
-        userId: user?.sub,
-      };
+        const token = {
+          user_id: user.sub,
+        };
+        const data = {
+          isLoggedIn: true,
+          userName: user?.name,
+          userEmail: user?.email,
+          pictureUrl: user?.picture,
+          isEmailVerified: user?.email_verified,
+          userId: user?.sub,
+        };
 
-      setUserLogin(data, dispatch);
+        setUserLogin(data, dispatch);
 
-      withoutAuthInstance
-        .post(url, token)
-        .then((response) => {
-          console.log(response);
-        })
-
-        .catch((error) => {
-          console.log(error);
-        });
+        withoutAuthInstance
+          .post(url, token)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
+
+    effect();
   }, [user]);
 
   useEffect(() => {
@@ -128,6 +161,16 @@ function Navbar() {
     if (user) effect();
   }, [user]);
 
+  const modalVariant = {
+    hidden: {
+      opacity: 0,
+      x: '-100vw',
+    },
+    visible: {
+      opacity: 1,
+      x: '0',
+    },
+  };
   return (
     <div className={classes.container}>
       <div className={classes.logoContainer} onClick={() => history.push('/')}>
@@ -190,14 +233,25 @@ function Navbar() {
         )}
       </div>
       <div className={classes.buttonGroup}>
-        <Link className={classes.link} to="/list">
-          {NavbarConst.LIST_YOUR_PROPERTY}
-        </Link>
+        <div className={classes.link}>
+          <Button className={classes.link} onClick={handleOpen}>
+            {NavbarConst.LIST_YOUR_PROPERTY}
+          </Button>
+          <Modal
+            open={open}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            hideBackdrop
+          >
+            <Box sx={style}>
+              <div>
+                <Form onCloseModal={handleClose} />
+              </div>
+            </Box>
+          </Modal>
+        </div>
         <Link className={classes.link} to="/bookmark">
           {NavbarConst.BOOKMARK}
-        </Link>
-        <Link className={classes.link} to="/contact">
-          {NavbarConst.CONTACT}
         </Link>
       </div>
       <div className={classes.actionButtonGroup}>

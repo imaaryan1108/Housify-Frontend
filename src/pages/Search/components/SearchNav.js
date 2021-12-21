@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Filterbar from './Filterbar';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function SearchNav() {
   const navbarState = useSelector((state) => state.navbar);
@@ -40,6 +41,7 @@ function SearchNav() {
       borderRadius: `${theme.typography.pxToRem(136)}`,
       padding: `${theme.typography.pxToRem(15)} ${theme.typography.pxToRem(0)}`,
       margin: `${theme.typography.pxToVh(0)} ${theme.typography.pxToVh(28)}`,
+      textDecoration: 'none',
     },
     favoriteIcon: {
       color: `${theme.palette.dark.text}`,
@@ -120,12 +122,12 @@ function SearchNav() {
         <Filterbar />
       </div>
 
-      <div className={classes.favorites}>
+      <Link className={classes.favorites} to="/bookmark">
         <Icon className={classes.favoriteIcon}>
           <FavoriteIcon />
         </Icon>
         <p className={classes.text}>FAVORITES</p>
-      </div>
+      </Link>
     </div>
   );
 }

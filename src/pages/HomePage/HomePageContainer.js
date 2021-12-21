@@ -8,7 +8,7 @@ function HomePageContainer() {
   return (
     <>
       <Helmet>
-        <title>SnapShelter</title>
+        <title>Housify</title>
       </Helmet>
       <Navbar />
       <HomePage />

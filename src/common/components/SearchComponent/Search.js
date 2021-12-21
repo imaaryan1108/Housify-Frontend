@@ -37,10 +37,6 @@ function Search() {
     if (newValue !== null) setActiveTab(newValue, dispatch);
   };
 
-  const handleSearchQuery = (e) => {
-    setSearchQuery(e.target.value, dispatch);
-  };
-
   const handleLocationDropdown = (e) => {
     if (locationAnchor !== null) {
       setLocationAnchor(null);
@@ -55,22 +51,6 @@ function Search() {
     setSelectedLocation(e.target.innerText, dispatch);
     setLocationAnchor(null);
     setLocationPopoverIsOpen(false);
-  };
-
-  const handlePriceDropdown = (e) => {
-    if (priceAnchor !== null) {
-      setPriceAnchor(null);
-      setPricePopoverIsOpen(!pricePopoverIsOpen);
-    } else {
-      setPriceAnchor(e.currentTarget);
-      setPricePopoverIsOpen(!pricePopoverIsOpen);
-    }
-  };
-
-  const handlePriceSelect = (e) => {
-    setSelectedMaxPrice(e.target.innerText, dispatch);
-    setPriceAnchor(null);
-    setPricePopoverIsOpen(false);
   };
 
   useEffect(() => {
@@ -105,11 +85,11 @@ function Search() {
     },
     searchboxContainer: {
       display: 'grid',
-      gridTemplateColumns: '0.6fr 0.2fr 0.6fr 0.2fr 0.2fr',
+      gridTemplateColumns: '0.6fr 0.2fr 0.2fr',
       alignItems: 'center',
       backgroundColor: theme.palette.primaryBlue,
       boxShadow: '15px, 21px, 50px #00000069',
-      maxWidth: theme.typography.pxToRem(1000),
+      maxWidth: theme.typography.pxToRem(600),
       padding: theme.typography.pxToRem(10),
       borderRadius: `0 ${theme.typography.pxToRem(
         45
@@ -213,37 +193,7 @@ function Search() {
           orientation="vertical"
           variant="fullWidth"
         />
-        <div className={classes.filter}>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <h2> {searchConst.MAX_PRICE} </h2>
-            <p className={classes.placeholder}>
-              {generalState.selectedMaxPrice === ''
-                ? searchConst.PRICE_PLACEHOLDER
-                : generalState.selectedMaxPrice}
-            </p>
-          </div>
-          {pricePopoverIsOpen ? (
-            <IconButton
-              className={classes.buttons}
-              onClick={handlePriceDropdown}
-            >
-              <ArrowDownIcon />
-            </IconButton>
-          ) : (
-            <IconButton
-              className={classes.buttons}
-              onClick={handlePriceDropdown}
-            >
-              <ArrowUpIcon />
-            </IconButton>
-          )}
-        </div>
-        <Divider
-          className={classes.divider}
-          component="ol"
-          orientation="vertical"
-          variant="fullWidth"
-        />
+
         <Link to="/search">
           <div className={classes.link}>
             <SearchIcon />
@@ -288,36 +238,6 @@ function Search() {
           <MenuItem onClick={handleLocationSelect}>Bhopal</MenuItem>
           <MenuItem onClick={handleLocationSelect}>Mumbai</MenuItem>
           <MenuItem onClick={handleLocationSelect}>Delhi</MenuItem>
-        </div>
-      </Popover>
-      <Popover
-        open={Boolean(priceAnchor)}
-        anchorEl={priceAnchor}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        onClose={() => setPriceAnchor(null)}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <div className={classes.popover}>
-          <div className={classes.popoverHeader}>
-            <h3>Price</h3>
-            <IconButton
-              size="small"
-              onClick={handlePriceDropdown}
-              className={classes.buttons}
-            >
-              <CloseIcon size="small" />
-            </IconButton>
-          </div>
-          <MenuItem onClick={handlePriceSelect}>Less Than 10L</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Between 10L & 50L</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Between 50L & 1Cr</MenuItem>
-          <MenuItem onClick={handlePriceSelect}>Above 1Cr</MenuItem>
         </div>
       </Popover>
     </div>

@@ -9,7 +9,7 @@ import userReducer from './userReducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['navbar', 'general'],
+  whitelist: ['navbar', 'general', 'user'],
 };
 
 const rootReduer = combineReducers({
