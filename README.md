@@ -1,7 +1,7 @@
-# SNAPSHELTER
-## **One Solution to all your housing problems in Raipur**
+# Housify
+## **One Solution to all your housing problems**
 
-*SnapShelter is your one stop solution to all your housing needs!*
+*Housify is your one stop solution to all your housing needs!*
 
 ---
 ----
@@ -14,4 +14,4 @@
 ---
 # Maintainers
 @imaaryan1108
-@imayush15
+
